@@ -20,4 +20,15 @@ You will submit two files: your (well-commented) code file, and a report detaili
 The assignment is due Wednesday, April 27; however, if you need additional time, please ask - I can be flexible (up to a few days) on the deadline.
 
 # Data files:
-- descriptions.txt- The text of the course descriptions. To import this file, easiest is probably this: np.loadtxt(mydir + "descriptions.txt", dtype="str", delimiter="\t", skiprows=1)  Please note that even the first column will end up as a string here - you'll want to be careful if you compare things against it.
+- descriptions.txt- The text of the course descriptions. To import this file, easiest is probably this: ```np.loadtxt(mydir + "descriptions.txt", dtype="str", delimiter="\t", skiprows=1)```  Please note that even the first column will end up as a string here - you'll want to be careful if you compare things against it.
+- school_codes.txt- The school each ID is associated with.
+- dept_codes.txt- The departments each ID is associated with.
+- prefix_codes.txt- The course prefix each ID is associated with.
+- SCRTXT.xlsx- Totally optional, but this will let you see (most of) the process by which I generated the data files. Also, the "SchoolMap" tab in the Excel workbook shows you the mapping from course prefixes to school/department/prefix codes.
+
+### Notes on Data Files
+- **Reminder:** Your models should be built ONLY from the descriptions. The other three files are there ONLY so that you can compute an ARI score.
+- All of the files are tab-delimited text; each file has only two columns - the ID and the content described.
+- All of the IDs and labels have been randomized - there is no information to be mined from them.
+- Any label of 0 indicates that the course does not fit cleanly into one of the schools/departments (e.g. military studies courses for ROTC students) - there should be few if any of these, since I removed many of them as I created the files.
+- I have cleaned up the course descriptions, but there are still a few issues - some of the descriptions are cut off, there are a few typos and weird hyphenizations, etc. -- just roll with it.
