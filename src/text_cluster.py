@@ -42,3 +42,13 @@ agglo_courses = AgglomerativeClustering(n_clusters=57, random_state=0).fit(descr
 lda_schools = LinearDiscriminantAnalysis(n_components=3, random_state=0).fit(descriptions)
 lda_departments = LinearDiscriminantAnalysis(n_components=37, random_state=0).fit(descriptions)
 lda_courses = LinearDiscriminantAnalysis(n_components=57, random_state=0).fit(descriptions)
+
+'''
+Use best parameter settings from above and try several different numbers of groups
+
+Suggestion: start with 2,4,6,10,15,20,30
+The optimal grouping will be the one with the highest silhouette score
+'''
+kmeans_schools = KMeans(n_clusters=2, random_state=0).fit(descriptions)
+agglo_schools = AgglomerativeClustering(n_clusters=2, random_state=0).fit(descriptions)
+lda_schools = LinearDiscriminantAnalysis(n_components=2, random_state=0).fit(descriptions)
