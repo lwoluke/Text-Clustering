@@ -18,3 +18,6 @@ For the fourth case, use the best parameter settings from above and try several 
 You will submit two files: your (well-commented) code file, and a report detailing your findings. The report should indicate which model & parameter settings produced the best result in each case as well as your own qualitative analysis that discusses things like which schools/departments show up cleanly and which seem to get merged with other departments or dispersed across several groups. (This is something of a "by hand" process - look through the courses that fall into each grouping.) You might also look at the top terms in each cluster to get a sense of what is important. The report should end up around two pages.
 
 The assignment is due Wednesday, April 27; however, if you need additional time, please ask - I can be flexible (up to a few days) on the deadline.
+
+# Data files:
+- descriptions.txt- The text of the course descriptions. To import this file, easiest is probably this: np.loadtxt(mydir + "descriptions.txt", dtype="str", delimiter="\t", skiprows=1)  Please note that even the first column will end up as a string here - you'll want to be careful if you compare things against it.
