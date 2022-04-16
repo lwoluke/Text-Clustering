@@ -49,42 +49,42 @@ Last is to be determined from testing
 Create for K-Means, Agglomerative, and LDA to compare which is best for various tests
 '''
 # K-MEANS
-kmeans_schools = KMeans(n_clusters=3, random_state=42).fit(desc_countvec)
-kmeans_departments = KMeans(n_clusters=33, random_state=42).fit(desc_countvec)
-kmeans_courses = KMeans(n_clusters=57, random_state=42).fit(desc_countvec)
+# kmeans_schools = KMeans(n_clusters=3, random_state=42).fit(desc_countvec)
+# kmeans_departments = KMeans(n_clusters=33, random_state=42).fit(desc_countvec)
+# kmeans_prefixes = KMeans(n_clusters=57, random_state=42).fit(desc_countvec)
 
-km_school_labels = kmeans_schools.labels_
-km_departments_labels = kmeans_departments.labels_
-km_courses_labels = kmeans_courses.labels_
+# km_school_labels = kmeans_schools.labels_
+# km_departments_labels = kmeans_departments.labels_
+# km_prefixes_labels = kmeans_prefixes.labels_
 
 # AGGLOMERATIVE 
-agglo_schools = AgglomerativeClustering(n_clusters=3).fit(desc_countvec)
-agglo_departments = AgglomerativeClustering(n_clusters=33).fit(desc_countvec)
-agglo_courses = AgglomerativeClustering(n_clusters=57).fit(desc_countvec)
+# agglo_schools = AgglomerativeClustering(n_clusters=3).fit(desc_countvec.toarray())
+# agglo_departments = AgglomerativeClustering(n_clusters=33).fit(desc_countvec.toarray())
+# agglo_prefixes = AgglomerativeClustering(n_clusters=57).fit(desc_countvec.toarray())
 
-agglo_schools_labels = agglo_schools.labels_
-agglo_departments_labels = agglo_departments.labels_
-agglo_courses_labels = agglo_courses.labels_
+# agglo_schools_labels = agglo_schools.labels_
+# agglo_departments_labels = agglo_departments.labels_
+# agglo_prefixes_labels = agglo_prefixes.labels_
 
 # LDA
-lda_schools = LatentDirichletAllocation(n_components=3, random_state=42).fit(desc_countvec)
-lda_departments = LatentDirichletAllocation(n_components=33, random_state=42).fit(desc_countvec)
-lda_courses = LatentDirichletAllocation(n_components=57, random_state=42).fit(desc_countvec)
+# lda_schools = LatentDirichletAllocation(n_components=3, random_state=42).fit(desc_countvec)
+# lda_departments = LatentDirichletAllocation(n_components=33, random_state=42).fit(desc_countvec)
+# lda_prefixes = LatentDirichletAllocation(n_components=57, random_state=42).fit(desc_countvec)
 
 # SCHOOLS TO ARRAY
-lda_schools_mat = sp.csr_matrix.toarray(desc_countvec)
-lda_schools_topics = np.matmul(lda_schools_mat, np.transpose(lda_schools.components_))
-lda_schools_answers = np.argmax(lda_schools_topics, axis=1)
+# lda_schools_mat = sp.csr_matrix.toarray(desc_countvec)
+# lda_schools_topics = np.matmul(lda_schools_mat, np.transpose(lda_schools.components_))
+# lda_schools_answers = np.argmax(lda_schools_topics, axis=1)
 
 # DEPARTMENTS TO ARRAY
-lda_departments_mat = sp.csr_matrix.toarray(desc_countvec)
-lda_departments_topics = np.matmul(lda_departments_mat, np.transpose(lda_departments.components_))
-lda_departments_answers = np.argmax(lda_departments_topics, axis=1)
+# lda_departments_mat = sp.csr_matrix.toarray(desc_countvec)
+# lda_departments_topics = np.matmul(lda_departments_mat, np.transpose(lda_departments.components_))
+# lda_departments_answers = np.argmax(lda_departments_topics, axis=1)
 
 # COURSES TO ARRAY
-lda_courses_mat = sp.csr_matrix.toarray(desc_countvec)
-lda_courses_topics = np.matmul(lda_courses_mat, np.transpose(lda_courses.components_))
-lda_courses_answers = np.argmax(lda_courses_topics, axis=1)
+# lda_prefixes_mat = sp.csr_matrix.toarray(desc_countvec)
+# lda_prefixes_topics = np.matmul(lda_prefixes_mat, np.transpose(lda_courses.components_))
+# lda_prefixes_answers = np.argmax(lda_prefixes_topics, axis=1)
 
 '''
 Use best parameter settings from above and try several different numbers of groups
@@ -165,7 +165,19 @@ Best silhouette scores for:
     lda = 
 '''
 
-# COMPUTE ARI SCORE
-deptcodes = np.loadtxt(mydir + "dept_codes.txt", dtype="str", delimiter="\t", skiprows=1)
-prefcodes = np.loadtxt(mydir + "prefix_codes.txt", dtype="str", delimiter="\t", skiprows=1)
+### COMPUTE ARI SCORE - K-MEANS, AGGLO, AND LDA ###
+
+# SIENA'S 3 SCHOOLS - EX: adjusted_rand_score(schoolcodes_data, kmeans_schools.labels_)
 schoolcodes = np.loadtxt(mydir + "school_codes.txt", dtype="str", delimiter="\t", skiprows=1)
+schoolcodes_key = schoolcodes[:,0]
+schoolcodes_data = schoolcodes[:,1]
+
+# SIENA'S 33 DEPARTMENTS - EX: adjusted_rand_score(deptcodes_data, kmeans_departments.labels_)
+deptcodes = np.loadtxt(mydir + "dept_codes.txt", dtype="str", delimiter="\t", skiprows=1)
+deptcodes_key = deptcodes[:,0]
+deptcodes_data = deptcodes[:,1]
+
+# SIENA'S 57 PREFIXES - EX: adjusted_rand_score(prefcodes_data, kmeans_prefixes.labels_)
+prefcodes = np.loadtxt(mydir + "prefix_codes.txt", dtype="str", delimiter="\t", skiprows=1)
+prefcodes_key = prefcodes[:,0]
+prefcodes_data = prefcodes[:,1]
