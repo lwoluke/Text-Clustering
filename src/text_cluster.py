@@ -10,20 +10,26 @@ The other three files are there ONLY so that you can compute an ARI score.
 
 import numpy as np
 import pandas as pd
-from sklearn.cluster import KMeans
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.cluster import KMeans, DBSCAN
 from sklearn.cluster import AgglomerativeClustering
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.feature_extraction.text import CountVectorizer, ENGLISH_STOP_WORDS, TfidfVectorizer
 from sklearn.model_selection import cross_val_score, GridSearchCV
 from sklearn.linear_model import LogisticRegression
 from sklearn.neural_network import MLPClassifier
+from sklearn.metrics import silhouette_score, adjusted_rand_score
+from sklearn.decomposition import LatentDirichletAllocation
 
 
-# load training data
+# Load Training Data
 mydir = "C:/Users/lwolu/OneDrive/Documents/College/Siena/Spring 2022 Semester/CSIS 320 - Machine Learning/Projects/Text-Clustering/data/"
-descriptions = np.loadtxt(mydir + "descriptions.txt", dtype="str", delimiter="\t", skiprows=1)
-descriptions_data = descriptions[:,1]
-descriptions_vec = CountVectorizer(max_df=.9).fit_transform(descriptions_data)
+file = np.loadtxt(mydir + "descriptions.txt", dtype="str", delimiter="\t", skiprows=1)
+descriptions = file[:,1]
+
+# Experiment with different max_df values in CountVectorizer
+desc_vec = CountVectorizer(max_df=0.2).fit_transform(descriptions)
 
 '''
 Clusters
@@ -37,17 +43,21 @@ Last is to be determined from testing
 
 Create for K-Means, Agglomerative, and LDA to compare which is best for various tests
 '''
-kmeans_schools = KMeans(n_clusters=3, random_state=42).fit(descriptions_vec)
-kmeans_departments = KMeans(n_clusters=37, random_state=42).fit(descriptions_vec)
-kmeans_courses = KMeans(n_clusters=57, random_state=42).fit(descriptions_vec)
+kmeans_schools = KMeans(n_clusters=3, random_state=42).fit(desc_vec)
+kmeans_departments = KMeans(n_clusters=37, random_state=42).fit(desc_vec)
+kmeans_courses = KMeans(n_clusters=57, random_state=42).fit(desc_vec)
 
-agglo_schools = AgglomerativeClustering(n_clusters=3).fit(descriptions_vec)
-agglo_departments = AgglomerativeClustering(n_clusters=37).fit(descriptions_vec)
-agglo_courses = AgglomerativeClustering(n_clusters=57).fit(descriptions_vec)
+km_school_labels = kmeans_schools.labels_
+km_departments_labels = kmeans_departments.labels_
+km_courses_labels = kmeans_courses.labels_
 
-lda_schools = LinearDiscriminantAnalysis(n_components=3, random_state=42).fit(descriptions_vec)
-lda_departments = LinearDiscriminantAnalysis(n_components=37, random_state=42).fit(descriptions_vec)
-lda_courses = LinearDiscriminantAnalysis(n_components=57, random_state=42).fit(descriptions_vec)
+# agglo_schools = AgglomerativeClustering(n_clusters=3).fit(descriptions_vec)
+# agglo_departments = AgglomerativeClustering(n_clusters=37).fit(descriptions_vec)
+# agglo_courses = AgglomerativeClustering(n_clusters=57).fit(descriptions_vec)
+
+# lda_schools = LinearDiscriminantAnalysis(n_components=3, random_state=42).fit(descriptions_vec)
+# lda_departments = LinearDiscriminantAnalysis(n_components=37, random_state=42).fit(descriptions_vec)
+# lda_courses = LinearDiscriminantAnalysis(n_components=57, random_state=42).fit(descriptions_vec)
 
 '''
 Use best parameter settings from above and try several different numbers of groups
@@ -55,6 +65,8 @@ Use best parameter settings from above and try several different numbers of grou
 Suggestion: start with 2,4,6,10,15,20,30
 The optimal grouping will be the one with the highest silhouette score
 '''
-kmeans_schools = KMeans(n_clusters=2, random_state=42).fit(descriptions_vec)
-agglo_schools = AgglomerativeClustering(n_clusters=2).fit(descriptions_vec)
-lda_schools = LinearDiscriminantAnalysis(n_components=2, random_state=42).fit(descriptions_vec)
+kmeans_best = KMeans(n_clusters=2, random_state=42).fit(desc_vec)
+km_best_labels = kmeans_best.labels_
+
+# agglo_best = AgglomerativeClustering(n_clusters=2).fit(descriptions_vec)
+# lda_best = LinearDiscriminantAnalysis(n_components=2, random_state=42).fit(descriptions_vec)
