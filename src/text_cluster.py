@@ -26,14 +26,14 @@ from sklearn.decomposition import LatentDirichletAllocation
 
 # Load Training Data
 mydir = "C:/Users/lwolu/OneDrive/Documents/College/Siena/Spring 2022 Semester/CSIS 320 - Machine Learning/Projects/Text-Clustering/data/"
-file = np.loadtxt(mydir + "descriptions.txt", dtype="str", delimiter="\t", skiprows=1)
-key = file[:,0]
-descriptions = file[:,1]
+descriptions = np.loadtxt(mydir + "descriptions.txt", dtype="str", delimiter="\t", skiprows=1)
+descriptions_key = descriptions[:,0]
+descriptions_data = descriptions[:,1]
 
 # Experiment with different max_df values in CountVectorizer (Use 0.2 as baseline)
 # Euclidean distance usually doesn't work well with count vectors. You might try it with tf-idf, though.
-desc_countvec = CountVectorizer(max_df=0.2).fit_transform(descriptions)
-desc_tfidfvec = TfidfVectorizer(max_df=0.2).fit_transform(descriptions)
+desc_countvec = CountVectorizer(ngram_range=(2,2), max_df=0.2).fit_transform(descriptions_data)
+desc_tfidfvec = TfidfVectorizer(ngram_range=(2,2), max_df=0.2).fit_transform(descriptions_data)
 
 
 '''
@@ -49,27 +49,42 @@ Last is to be determined from testing
 Create for K-Means, Agglomerative, and LDA to compare which is best for various tests
 '''
 # K-MEANS
-# kmeans_schools = KMeans(n_clusters=3, random_state=42).fit(desc_countvec)
-# kmeans_departments = KMeans(n_clusters=33, random_state=42).fit(desc_countvec)
-# kmeans_courses = KMeans(n_clusters=57, random_state=42).fit(desc_countvec)
+kmeans_schools = KMeans(n_clusters=3, random_state=42).fit(desc_countvec)
+kmeans_departments = KMeans(n_clusters=33, random_state=42).fit(desc_countvec)
+kmeans_courses = KMeans(n_clusters=57, random_state=42).fit(desc_countvec)
 
-# km_school_labels = kmeans_schools.labels_
-# km_departments_labels = kmeans_departments.labels_
-# km_courses_labels = kmeans_courses.labels_
+km_school_labels = kmeans_schools.labels_
+km_departments_labels = kmeans_departments.labels_
+km_courses_labels = kmeans_courses.labels_
 
 # AGGLOMERATIVE 
-# agglo_schools = AgglomerativeClustering(n_clusters=3).fit(desc_countvec)
-# agglo_departments = AgglomerativeClustering(n_clusters=33).fit(desc_countvec)
-# agglo_courses = AgglomerativeClustering(n_clusters=57).fit(desc_countvec)
+agglo_schools = AgglomerativeClustering(n_clusters=3).fit(desc_countvec)
+agglo_departments = AgglomerativeClustering(n_clusters=33).fit(desc_countvec)
+agglo_courses = AgglomerativeClustering(n_clusters=57).fit(desc_countvec)
 
-# agglo_schools_labels = agglo_schools.labels_
-# agglo_departments_labels = agglo_departments.labels_
-# agglo_courses_labels = agglo_courses.labels_
+agglo_schools_labels = agglo_schools.labels_
+agglo_departments_labels = agglo_departments.labels_
+agglo_courses_labels = agglo_courses.labels_
 
 # LDA
-# lda_schools = LatentDirichletAllocation(n_components=3, random_state=42).fit(desc_countvec)
-# lda_departments = LatentDirichletAllocation(n_components=33, random_state=42).fit(desc_countvec)
-# lda_courses = LatentDirichletAllocation(n_components=57, random_state=42).fit(desc_countvec)
+lda_schools = LatentDirichletAllocation(n_components=3, random_state=42).fit(desc_countvec)
+lda_departments = LatentDirichletAllocation(n_components=33, random_state=42).fit(desc_countvec)
+lda_courses = LatentDirichletAllocation(n_components=57, random_state=42).fit(desc_countvec)
+
+# SCHOOLS TO ARRAY
+lda_schools_mat = sp.csr_matrix.toarray(desc_countvec)
+lda_schools_topics = np.matmul(lda_schools_mat, np.transpose(lda_schools.components_))
+lda_schools_answers = np.argmax(lda_schools_topics, axis=1)
+
+# DEPARTMENTS TO ARRAY
+lda_departments_mat = sp.csr_matrix.toarray(desc_countvec)
+lda_departments_topics = np.matmul(lda_departments_mat, np.transpose(lda_departments.components_))
+lda_departments_answers = np.argmax(lda_departments_topics, axis=1)
+
+# COURSES TO ARRAY
+lda_courses_mat = sp.csr_matrix.toarray(desc_countvec)
+lda_courses_topics = np.matmul(lda_courses_mat, np.transpose(lda_courses.components_))
+lda_courses_answers = np.argmax(lda_courses_topics, axis=1)
 
 '''
 Use best parameter settings from above and try several different numbers of groups
@@ -115,3 +130,42 @@ When calculating silhouette coefficient:
 # post_topics = np.matmul(desc_mat, np.transpose(lda_best.components_))
 # lda_best_answers = np.argmax(post_topics, axis=1)
 # lda_silhouette = silhouette_score(desc_tfidfvec, lda_best_answers, metric='manhattan')
+
+'''
+Best silhouette scores for:
+    
+    1.
+    ngram_range = (1,1)
+    max_df = 0.2
+    
+    NUM CLUSTERS IDEAL
+    CountVectorizer)
+    kmeans = 2
+    Agglomerative = 5
+    lda = 2
+    
+    TfidfVectorizer)
+    kmeans = 2
+    Agglomerative = 2
+    lda = 50
+    
+    2.
+    ngram_range = (2,2)
+    max_df = 0.2
+    
+    NUM CLUSTERS IDEAL
+    CountVectorizer)
+    kmeans =
+    Agglomerative = 
+    lda = 
+    
+    TfidfVectorizer)
+    kmeans = 
+    Agglomerative = 
+    lda = 
+'''
+
+# COMPUTE ARI SCORE
+deptcodes = np.loadtxt(mydir + "dept_codes.txt", dtype="str", delimiter="\t", skiprows=1)
+prefcodes = np.loadtxt(mydir + "prefix_codes.txt", dtype="str", delimiter="\t", skiprows=1)
+schoolcodes = np.loadtxt(mydir + "school_codes.txt", dtype="str", delimiter="\t", skiprows=1)
