@@ -48,6 +48,7 @@ Last is to be determined from testing
 
 Create for K-Means, Agglomerative, and LDA to compare which is best for various tests
 '''
+# K-MEANS
 # kmeans_schools = KMeans(n_clusters=3, random_state=42).fit(desc_countvec)
 # kmeans_departments = KMeans(n_clusters=33, random_state=42).fit(desc_countvec)
 # kmeans_courses = KMeans(n_clusters=57, random_state=42).fit(desc_countvec)
@@ -56,10 +57,16 @@ Create for K-Means, Agglomerative, and LDA to compare which is best for various 
 # km_departments_labels = kmeans_departments.labels_
 # km_courses_labels = kmeans_courses.labels_
 
+# AGGLOMERATIVE 
 # agglo_schools = AgglomerativeClustering(n_clusters=3).fit(desc_countvec)
 # agglo_departments = AgglomerativeClustering(n_clusters=33).fit(desc_countvec)
 # agglo_courses = AgglomerativeClustering(n_clusters=57).fit(desc_countvec)
 
+# agglo_schools_labels = agglo_schools.labels_
+# agglo_departments_labels = agglo_departments.labels_
+# agglo_courses_labels = agglo_courses.labels_
+
+# LDA
 # lda_schools = LatentDirichletAllocation(n_components=3, random_state=42).fit(desc_countvec)
 # lda_departments = LatentDirichletAllocation(n_components=33, random_state=42).fit(desc_countvec)
 # lda_courses = LatentDirichletAllocation(n_components=57, random_state=42).fit(desc_countvec)
@@ -80,9 +87,9 @@ When calculating silhouette coefficient:
 '''
 
 ### BEST FOR CountVectorizer ###
-kmeans_best = KMeans(n_clusters=2, random_state=42).fit(desc_tfidfvec)
-km_best_labels = kmeans_best.labels_
-kmeans_silhouette = silhouette_score(desc_countvec, kmeans_best.labels_, metric='manhattan')
+# kmeans_best = KMeans(n_clusters=2, random_state=42).fit(desc_countvec)
+# km_best_labels = kmeans_best.labels_
+# kmeans_silhouette = silhouette_score(desc_countvec, kmeans_best.labels_, metric='manhattan')
 
 # agglo_best = AgglomerativeClustering(n_clusters=2).fit(desc_countvec.toarray())
 # agglo_best_labels = agglo_best.labels_
@@ -95,3 +102,16 @@ kmeans_silhouette = silhouette_score(desc_countvec, kmeans_best.labels_, metric=
 # lda_silhouette = silhouette_score(desc_countvec, lda_best_answers, metric='manhattan')
 
 ### BEST FOR TfidfVectorizer ###
+# kmeans_best = KMeans(n_clusters=2, random_state=42).fit(desc_tfidfvec)
+# km_best_labels = kmeans_best.labels_
+# kmeans_silhouette = silhouette_score(desc_tfidfvec, kmeans_best.labels_, metric='manhattan')
+
+# agglo_best = AgglomerativeClustering(n_clusters=2).fit(desc_tfidfvec.toarray())
+# agglo_best_labels = agglo_best.labels_
+# agglo_silhouette = silhouette_score(desc_tfidfvec, agglo_best_labels, metric='manhattan')
+
+# lda_best = LatentDirichletAllocation(n_components=2, random_state=42).fit(desc_tfidfvec)
+# desc_mat = sp.csr_matrix.toarray(desc_tfidfvec)
+# post_topics = np.matmul(desc_mat, np.transpose(lda_best.components_))
+# lda_best_answers = np.argmax(post_topics, axis=1)
+# lda_silhouette = silhouette_score(desc_tfidfvec, lda_best_answers, metric='manhattan')
