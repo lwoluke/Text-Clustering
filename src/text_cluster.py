@@ -32,8 +32,8 @@ descriptions_data = descriptions[:,1]
 
 # Experiment with different max_df values in CountVectorizer (Use 0.2 as baseline)
 # Euclidean distance usually doesn't work well with count vectors. You might try it with tf-idf, though.
-desc_countvec = CountVectorizer(ngram_range=(2,2), max_df=0.2).fit_transform(descriptions_data)
-desc_tfidfvec = TfidfVectorizer(ngram_range=(2,2), max_df=0.2).fit_transform(descriptions_data)
+desc_countvec = CountVectorizer(ngram_range=(1,1), max_df=0.2).fit_transform(descriptions_data)
+desc_tfidfvec = TfidfVectorizer(ngram_range=(1,1), max_df=0.2).fit_transform(descriptions_data)
 
 
 '''
@@ -49,41 +49,41 @@ Last is to be determined from testing
 Create for K-Means, Agglomerative, and LDA to compare which is best for various tests
 '''
 # K-MEANS
-# kmeans_schools = KMeans(n_clusters=3, random_state=42).fit(desc_countvec)
-# kmeans_departments = KMeans(n_clusters=33, random_state=42).fit(desc_countvec)
-# kmeans_prefixes = KMeans(n_clusters=57, random_state=42).fit(desc_countvec)
+# kmeans_schools = KMeans(n_clusters=3, random_state=42).fit(desc_tfidfvec)
+# kmeans_departments = KMeans(n_clusters=33, random_state=42).fit(desc_tfidfvec)
+# kmeans_prefixes = KMeans(n_clusters=57, random_state=42).fit(desc_tfidfvec)
 
 # km_school_labels = kmeans_schools.labels_
 # km_departments_labels = kmeans_departments.labels_
 # km_prefixes_labels = kmeans_prefixes.labels_
 
 # AGGLOMERATIVE 
-# agglo_schools = AgglomerativeClustering(n_clusters=3).fit(desc_countvec.toarray())
-# agglo_departments = AgglomerativeClustering(n_clusters=33).fit(desc_countvec.toarray())
-# agglo_prefixes = AgglomerativeClustering(n_clusters=57).fit(desc_countvec.toarray())
+# agglo_schools = AgglomerativeClustering(n_clusters=3).fit(desc_tfidfvec.toarray())
+# agglo_departments = AgglomerativeClustering(n_clusters=33).fit(desc_tfidfvec.toarray())
+# agglo_prefixes = AgglomerativeClustering(n_clusters=57).fit(desc_tfidfvec.toarray())
 
 # agglo_schools_labels = agglo_schools.labels_
 # agglo_departments_labels = agglo_departments.labels_
 # agglo_prefixes_labels = agglo_prefixes.labels_
 
 # LDA
-# lda_schools = LatentDirichletAllocation(n_components=3, random_state=42).fit(desc_countvec)
-# lda_departments = LatentDirichletAllocation(n_components=33, random_state=42).fit(desc_countvec)
-# lda_prefixes = LatentDirichletAllocation(n_components=57, random_state=42).fit(desc_countvec)
+# lda_schools = LatentDirichletAllocation(n_components=3, random_state=42).fit(desc_tfidfvec)
+# lda_departments = LatentDirichletAllocation(n_components=33, random_state=42).fit(desc_tfidfvec)
+# lda_prefixes = LatentDirichletAllocation(n_components=57, random_state=42).fit(desc_tfidfvec)
 
 # SCHOOLS TO ARRAY
-# lda_schools_mat = sp.csr_matrix.toarray(desc_countvec)
+# lda_schools_mat = sp.csr_matrix.toarray(desc_tfidfvec)
 # lda_schools_topics = np.matmul(lda_schools_mat, np.transpose(lda_schools.components_))
 # lda_schools_answers = np.argmax(lda_schools_topics, axis=1)
 
 # DEPARTMENTS TO ARRAY
-# lda_departments_mat = sp.csr_matrix.toarray(desc_countvec)
+# lda_departments_mat = sp.csr_matrix.toarray(desc_tfidfvec)
 # lda_departments_topics = np.matmul(lda_departments_mat, np.transpose(lda_departments.components_))
 # lda_departments_answers = np.argmax(lda_departments_topics, axis=1)
 
 # COURSES TO ARRAY
-# lda_prefixes_mat = sp.csr_matrix.toarray(desc_countvec)
-# lda_prefixes_topics = np.matmul(lda_prefixes_mat, np.transpose(lda_courses.components_))
+# lda_prefixes_mat = sp.csr_matrix.toarray(desc_tfidfvec)
+# lda_prefixes_topics = np.matmul(lda_prefixes_mat, np.transpose(lda_prefixes.components_))
 # lda_prefixes_answers = np.argmax(lda_prefixes_topics, axis=1)
 
 '''
@@ -181,3 +181,28 @@ deptcodes_data = deptcodes[:,1]
 prefcodes = np.loadtxt(mydir + "prefix_codes.txt", dtype="str", delimiter="\t", skiprows=1)
 prefcodes_key = prefcodes[:,0]
 prefcodes_data = prefcodes[:,1]
+
+### DBSCAN
+
+# Generate vectorizers
+db_countvec = CountVectorizer(ngram_range=(1,1), max_df=0.2).fit_transform(descriptions_data)
+db_tfidfvec = TfidfVectorizer(ngram_range=(1,1), max_df=0.2).fit_transform(descriptions_data)
+
+# Generate clusters
+db1 = DBSCAN(eps=100, min_samples=3, metric="manhattan", n_jobs=-1)
+db2 = DBSCAN(eps=50, min_samples=5, metric="manhattan", n_jobs=-1)
+db3 = DBSCAN(eps=75, min_samples=4, metric="manhattan", n_jobs=-1)
+
+# Fit to CountVectorizer and TfidfVectorizer
+db1.fit(db_countvec)
+db2.fit(db_countvec)
+db3.fit(db_countvec)
+
+db1.fit(db_tfidfvec)
+db2.fit(db_tfidfvec)
+db3.fit(db_tfidfvec)
+
+# Get silhouette and ARI scores - Ex: silhouette_score(db_countvec, db1.labels_, metric='manhattan')
+db1_silhouette = silhouette_score(db_countvec, db1.labels_, metric='manhattan')
+db2_silhouette = silhouette_score(db_countvec, db2.labels_, metric='manhattan')
+db2_silhouette = silhouette_score(db_countvec, db3.labels_, metric='manhattan')
