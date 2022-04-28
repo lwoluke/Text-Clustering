@@ -9,9 +9,6 @@ The other three files are there ONLY so that you can compute an ARI score.
 """
 
 import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
 from sklearn.cluster import KMeans, DBSCAN
 from sklearn.cluster import AgglomerativeClustering
 from sklearn.decomposition import LatentDirichletAllocation
