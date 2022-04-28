@@ -27,3 +27,14 @@ For the fourth case, I used the best parameter settings from above and tried out
 - All of the files are tab-delimited text; each file has only two columns - the ID and the content described.
 - All of the IDs and labels have been randomized - there is no information to be mined from them.
 - Any label of 0 indicates that the course does not fit cleanly into one of the schools/departments (e.g. military studies courses for ROTC students).
+
+## Setup
+To setup your computer, follow these steps:
+
+1) Install Spyder: https://docs.spyder-ide.org/current/installation.html
+2) Clone this repo using the command:
+```
+git clone "https://github.com/lwoluke/Text-Clustering.git"
+
+#### Blog post I made on the creation of this project: https://medium.com/p/b34b633ff123/edit
+
