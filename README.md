@@ -35,6 +35,6 @@ To setup your computer, follow these steps:
 2) Clone this repo using the command:
 ```
 git clone "https://github.com/lwoluke/Text-Clustering.git"
-
+```
 #### Blog post I made on the creation of this project: https://medium.com/p/b34b633ff123/edit
 
