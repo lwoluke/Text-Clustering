@@ -32,7 +32,7 @@ For the fourth case, I used the best parameter settings from above and tried out
 To setup your computer, follow these steps:
 
 1) Install Spyder: https://docs.spyder-ide.org/current/installation.html
-2) If you need to install any of the modules I used, follow the instructions in this video: https://www.youtube.com/watch?v=i7Njb3xO4Fw
+2) If you need to install any of the packages I used, follow the instructions in this video: https://www.youtube.com/watch?v=i7Njb3xO4Fw
 3) Clone this repo using the command:
 ```
 git clone "https://github.com/lwoluke/Text-Clustering.git"
