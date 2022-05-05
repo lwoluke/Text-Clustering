@@ -2,7 +2,7 @@
 Python and ML project to cluster the descriptions of Siena's courses.
 
 # Project Overview
-The goal of this project is to cluster the descriptions of Siena's courses. The first step will be vectorizing the text appropriately. Make sure to set the max_df parameter of your vectorizer to eliminate extremely common words (e.g. "course").
+The goal of this project is to cluster the descriptions of Siena's courses. The first step will be vectorizing the text appropriately. 
 
 Four different groupings will be created:
 - A clustering with three groups (corresponding to Siena's three schools)
@@ -11,7 +11,6 @@ Four different groupings will be created:
 - A clustering with the optimal number of groups, based on silhouette score
 
 The first three of these have a fixed number of clusters, so I decided to use k-means, agglomerative clustering, and LDA to compare which is best by adjusting parameters to maximize the ARI when compared to the ground truth.
-- Note: There are a few courses with "0" labels for department and course prefix, and thus 34 & 58 ground truth labels in these settings. These course do NOT actually group together, and ARI will mark them "wrong" no matter how my model treats them.
 
 For the fourth case, I used the best parameter settings from above and tried out several different numbers of groups, ranging from 2 up to over 80 groups. I also tried DBSCAN with a few different parameter settings in order to see how many groups it suggested as well. My optimal grouping is the one with the highest silhouette score.
 
